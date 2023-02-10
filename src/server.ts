@@ -32,9 +32,20 @@ app.get("/filteredimage",  (req: Request, res: Response ) => {
  
   const image_url = req.query.image_url as string;
   if (!image_url) {
-    return res.status(400).send({ message: "please provide image_url parameter "});
+    return res.status(422).send({ message: "please provide image_url parameter "});
   }
- } );
+
+  filterImageFromURL(image_url)
+    .then((filtered_path) => {
+      res.status(200).sendFile(filtered_path, () => {
+        deleteLocalFiles([filtered_path]);
+      });
+    })
+    .catch((err) => {
+      return res.status(500).send({ message: "Failed to filter the image." });
+    });
+
+ });
 
   //! END @TODO1
   
