@@ -32,7 +32,7 @@ app.get("/filteredimage",  (req: Request, res: Response ) => {
  
   const image_url = req.query.image_url as string;
   if (!image_url) {
-    return res.status(422).send({ message: "please provide image_url parameter "});
+    return res.status(422).send({ message: "422 error: please provide image_url parameter "});
   }
 
   filterImageFromURL(image_url)
@@ -42,7 +42,8 @@ app.get("/filteredimage",  (req: Request, res: Response ) => {
       });
     })
     .catch((err) => {
-      return res.status(500).send({ message: "Failed to filter the image." });
+      console.error(`Error while downloading image: ${err.message}`);
+      return res.status(500).send({ message: "500 error : Failed to filter the image." });
     });
 
  });
